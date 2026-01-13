@@ -34,7 +34,7 @@ Website Catatan Transaksi Perdagangan Game Rucoy Online - Sebagai Catatan Seller
 - Tidak bisa diedit langsung (hanya melalui Add Transaction)
 
 ### Halaman Credits
-- Contact Support: haryantomini@gmail.com
+- Contact Support
 
 ### Halaman Advance
 - **Card 1 & 2**: Charts data pembelian dan penjualan semua akun
@@ -124,3 +124,4 @@ MIT License - Lihat file LICENSE untuk detail lengkap.
 ## Support
 
 Untuk pertanyaan atau bantuan, hubungi: edhanstore@gmail.com
+
