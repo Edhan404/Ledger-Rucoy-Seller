@@ -1,0 +1,42 @@
+{
+  "name": "Rucoy Ledger",
+  "short_name": "Rucoy Ledger",
+  "description": "Catatan Transaksi Perdagangan Game Rucoy Online",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f7fa",
+  "theme_color": "#4a90e2",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["finance", "productivity", "games"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Portfolio",
+      "short_name": "Portfolio",
+      "description": "View portfolio",
+      "url": "/index.html",
+      "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Add Transaction",
+      "short_name": "Add Transaction",
+      "description": "Add new transaction",
+      "url": "/add-transaction.html",
+      "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

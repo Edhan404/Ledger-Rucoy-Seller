@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tambah dan Edit Transaksi Rucoy Online">
+    <title>Rucoy Ledger - Add Transaction</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4a90e2">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-text">
+                <h1>Add Transaction</h1>
+                <p>Catatan Transaksi Perdagangan - Tambah dan Edit Transaksi</p>
+            </div>
+            <div class="header-buttons">
+                <button class="btn btn-secondary" onclick="window.location.href='inventory.html'">Inventory</button>
+                <button class="btn btn-secondary" onclick="window.location.href='index.html'">Portfolio</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('importCSV').click()">Import CSV</button>
+                <input type="file" id="importCSV" accept=".csv" style="display: none;" onchange="importTransactionsCSV(event)">
+                <button class="btn btn-secondary" onclick="exportTransactionsCSV()">Export CSV</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="transaction-layout">
+            <!-- Left Card: Add Transaction Form -->
+            <div class="card card-form">
+                <h2>Add Transaction</h2>
+                <form id="transactionForm" onsubmit="addTransaction(event)">
+                    <div class="form-group">
+                        <label for="transactionDate">Tanggal:</label>
+                        <input type="date" id="transactionDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="transactionAction">Aksi:</label>
+                        <select id="transactionAction" required>
+                            <option value="BUY">BUY (Outflow)</option>
+                            <option value="SELL">SELL (Inflow)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="transactionItemName">Nama Barang:</label>
+                        <input type="text" id="transactionItemName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="transactionTier">Tier:</label>
+                        <select id="transactionTier" required>
+                            <option value="Common">Common</option>
+                            <option value="Uncommon">Uncommon</option>
+                            <option value="Rare">Rare</option>
+                            <option value="Ultra Rare">Ultra Rare</option>
+                            <option value="Legendary">Legendary</option>
+                            <option value="Mythic">Mythic</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="transactionQuantity">Quantity/Jumlah:</label>
+                        <input type="number" id="transactionQuantity" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="transactionTotalPrice">Total Harga/Equity (Gold Coins):</label>
+                        <input type="number" id="transactionTotalPrice" min="0" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="transactionNotes">Catatan:</label>
+                        <textarea id="transactionNotes" rows="3"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Add to List</button>
+                        <button type="button" class="btn btn-secondary" onclick="clearTransactionForm()">Clear</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Right Card: Transactions Table -->
+            <div class="card card-table">
+                <div class="card-header">
+                    <h2>Transaction List</h2>
+                    <div class="filter-actions">
+                        <button class="btn-filter active" onclick="filterTransactions('ALL')">All</button>
+                        <button class="btn-filter" onclick="filterTransactions('BUY')">Buy</button>
+                        <button class="btn-filter" onclick="filterTransactions('SELL')">Sell</button>
+                    </div>
+                </div>
+                <div class="summary-info">
+                    <span id="transactionCount">Total: 0</span>
+                    <span id="currentEquity">• Equity: 0 Gold Coins</span>
+                    <span id="realizedProfit">• Profit Terealisasi: 0 Gold Coins</span>
+                </div>
+                <div class="table-container">
+                    <table class="transactions-table">
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>Tanggal</th>
+                                <th>Tier</th>
+                                <th>Aksi</th>
+                                <th>Jumlah</th>
+                                <th>Total</th>
+                                <th>Equity</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionsTableBody">
+                            <!-- Transactions will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Edit Transaction Modal -->
+    <div id="editTransactionModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditTransactionModal()">&times;</span>
+            <h2>Edit Transaction</h2>
+            <form id="editTransactionForm" onsubmit="saveTransactionEdit(event)">
+                <input type="hidden" id="editTransactionId">
+                <div class="form-group">
+                    <label for="editTransactionDate">Tanggal:</label>
+                    <input type="date" id="editTransactionDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="editTransactionAction">Aksi:</label>
+                    <select id="editTransactionAction" required>
+                        <option value="BUY">BUY (Outflow)</option>
+                        <option value="SELL">SELL (Inflow)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editTransactionItemName">Nama Barang:</label>
+                    <input type="text" id="editTransactionItemName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editTransactionTier">Tier:</label>
+                    <select id="editTransactionTier" required>
+                        <option value="Common">Common</option>
+                        <option value="Uncommon">Uncommon</option>
+                        <option value="Rare">Rare</option>
+                        <option value="Ultra Rare">Ultra Rare</option>
+                        <option value="Legendary">Legendary</option>
+                        <option value="Mythic">Mythic</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editTransactionQuantity">Quantity/Jumlah:</label>
+                    <input type="number" id="editTransactionQuantity" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="editTransactionTotalPrice">Total Harga/Equity (Gold Coins):</label>
+                    <input type="number" id="editTransactionTotalPrice" min="0" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="editTransactionNotes">Catatan:</label>
+                    <textarea id="editTransactionNotes" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeEditTransactionModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/data-manager.js"></script>
+    <script src="js/add-transaction.js"></script>
+    <script>
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('Service Worker registered'))
+                    .catch(err => console.log('Service Worker registration failed'));
+            });
+        }
+    </script>
+</body>
+</html>

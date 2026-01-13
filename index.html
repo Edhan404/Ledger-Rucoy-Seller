@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Catatan Transaksi Perdagangan Game Rucoy Online">
+    <title>Rucoy Ledger - Portfolio</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4a90e2">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-text">
+                <h1>Rucoy Ledger</h1>
+                <p>Catatan Transaksi Perdagangan Game Rucoy Online - Portfolio</p>
+            </div>
+            <div class="header-buttons">
+                <button class="btn btn-secondary" onclick="window.location.href='credits.html'">Credits</button>
+                <button class="btn btn-secondary" onclick="window.location.href='advance.html'">Advance</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="portfolio-grid">
+            <!-- Card 1: Net Asset Value -->
+            <div class="card card-primary">
+                <h2>Net Asset Value</h2>
+                <div class="net-asset-value" id="netAssetValue">0 Gold Coins</div>
+            </div>
+
+            <!-- Card 2: Total Summary -->
+            <div class="card card-secondary">
+                <h2>Total Summary</h2>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <span class="total blue">Item Value (Gold)</span>
+                        <span class="amount" id="totalIAmount">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="total green">Gold Value</span>
+                        <span class="amount" id="totalGAmount">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="total orange">Diamond Value</span>
+                        <span class="amount" id="totalDAmount">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Accounts Table -->
+            <div class="card card-full">
+                <div class="card-header">
+                    <h2>Accounts</h2>
+                    <div class="card-actions">
+                        <button class="btn btn-primary" onclick="showAddAccountModal()">Add New Account</button>
+                        <button class="btn btn-secondary" onclick="exportPortfolioCSV()">Export CSV</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="accounts-table">
+                        <thead>
+                            <tr>
+                                <th>Account Name</th>
+                                <th>I Amount</th>
+                                <th>G Amount</th>
+                                <th>D Amount</th>
+                                <th>Total Value</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="accountsTableBody">
+                            <!-- Accounts will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Account Modal -->
+    <div id="addAccountModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAddAccountModal()">&times;</span>
+            <h2>Add New Account</h2>
+            <form id="addAccountForm" onsubmit="addAccount(event)">
+                <div class="form-group">
+                    <label for="accountName">Account Name:</label>
+                    <input type="text" id="accountName" required>
+                </div>
+                <div class="form-group">
+                    <label for="accountLabel">Label:</label>
+                    <input type="text" id="accountLabel">
+                </div>
+                <div class="form-group">
+                    <label for="initialEquity">Initial Equity (Gold Coins):</label>
+                    <input type="number" id="initialEquity" value="0" min="0">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Add Account</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeAddAccountModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Account Modal -->
+    <div id="editAccountModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditAccountModal()">&times;</span>
+            <h2>Edit Account</h2>
+            <form id="editAccountForm" onsubmit="saveAccountEdit(event)">
+                <input type="hidden" id="editAccountId">
+                <div class="form-group">
+                    <label for="editAccountName">Account Name:</label>
+                    <input type="text" id="editAccountName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editAccountLabel">Label:</label>
+                    <input type="text" id="editAccountLabel">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeEditAccountModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteConfirmModal" class="modal">
+        <div class="modal-content">
+            <h2>Confirm Delete</h2>
+            <p>Are you sure you want to delete this account? This action cannot be undone.</p>
+            <div class="form-actions">
+                <button class="btn btn-danger" onclick="confirmDeleteAccount()">Delete</button>
+                <button class="btn btn-secondary" onclick="closeDeleteConfirmModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data-manager.js"></script>
+    <script src="js/portfolio.js"></script>
+    <script>
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('Service Worker registered'))
+                    .catch(err => console.log('Service Worker registration failed'));
+            });
+        }
+    </script>
+</body>
+</html>
